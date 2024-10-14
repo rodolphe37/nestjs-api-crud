@@ -14,6 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ResetPasswordDto } from './dto/resetPasswordDto';
 import { ResetPasswordConfirmationDto } from './dto/resetPasswordConfirmationDto';
+import { DeleteAccountDto } from './dto/deleteAccountDto';
 
 @Injectable()
 export class AuthService {
@@ -93,20 +94,37 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-   const match = speakeasy.totp.verify({
+    const match = speakeasy.totp.verify({
       secret: this.configService.get('OTP_CODE'),
       token: code,
       digits: 5,
       step: 60 * 15,
       encoding: 'base32',
     });
-    if(!match) throw new UnauthorizedException("Invalid/expired token")
-        const hash = await bcrypt.hash(password, 10)
+    if (!match) throw new UnauthorizedException('Invalid/expired token');
+    const hash = await bcrypt.hash(password, 10);
     await this.prismaService.user.update({
-        where: {
-            email
-        }, data: {password: hash}
-    })
-    return {data: "Password updated"}
+      where: {
+        email,
+      },
+      data: { password: hash },
+    });
+    return { data: 'Password updated' };
+  }
+
+  async deleteAccount(userId: number, deleteAccountDto: DeleteAccountDto) {
+    const { password } = deleteAccountDto;
+    const user = await this.prismaService.user.findUnique({
+      where: { userId },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      throw new UnauthorizedException('Password does not match');
+    }
+    await this.prismaService.user.delete({ where: { userId } });
+    return {data: "User succesfully deleted"}
   }
 }
