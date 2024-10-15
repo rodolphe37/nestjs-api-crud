@@ -1,5 +1,5 @@
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SignupDto } from './dto/signupDto';
+import { SignupDto } from './dto/signup.dto';
 import {
   ConflictException,
   Injectable,
@@ -9,12 +9,12 @@ import {
 import * as bcrypt from 'bcrypt';
 import * as speakeasy from 'speakeasy';
 import { MailerService } from 'src/mailer/mailer.service';
-import { SigninDto } from './dto/signinDto';
+import { SigninDto } from './dto/signin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { ResetPasswordDto } from './dto/resetPasswordDto';
-import { ResetPasswordConfirmationDto } from './dto/resetPasswordConfirmationDto';
-import { DeleteAccountDto } from './dto/deleteAccountDto';
+import { ResetPasswordDto } from './dto/resetPassword.dto';
+import { ResetPasswordConfirmationDto } from './dto/resetPasswordConfirmation.dto';
+import { DeleteAccountDto } from './dto/deleteAccount.dto';
 
 @Injectable()
 export class AuthService {

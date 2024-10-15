@@ -11,10 +11,12 @@ import {
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { Request } from 'express';
-import { CreateCommentDto } from './dto/createCommentDto';
+import { CreateCommentDto } from './dto/createComment.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { UpdateCommentDto } from './dto/updateCommentDto';
-
+import { UpdateCommentDto } from './dto/updateComment.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+@ApiBearerAuth()
+@ApiTags('Comment')
 @Controller('comments')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
@@ -44,7 +46,7 @@ export class CommentController {
     @Req() request: Request,
     @Body() updateCommentDto: UpdateCommentDto,
   ) {
-    const userId = request.user['userId']
-    return this.commentService.update(commentId, userId, updateCommentDto)
+    const userId = request.user['userId'];
+    return this.commentService.update(commentId, userId, updateCommentDto);
   }
 }

@@ -4,9 +4,9 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateCommentDto } from './dto/createCommentDto';
+import { CreateCommentDto } from './dto/createComment.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UpdateCommentDto } from './dto/updateCommentDto';
+import { UpdateCommentDto } from './dto/updateComment.dto';
 
 @Injectable()
 export class CommentService {
